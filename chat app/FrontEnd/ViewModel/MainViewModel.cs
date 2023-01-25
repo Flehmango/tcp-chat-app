@@ -30,6 +30,7 @@ namespace chat_app.FrontEnd.ViewModel
         public string message { get; set; }
 
         public RelayCommand ConnectToServerCommand { get; set; }
+        public RelayCommand SendPrivateMessageCommand { get; set; }
         public RelayCommand SendMessageCommand { get; set; }
         public RelayCommand SwitchStatusCommand { get; set; }
 
@@ -42,6 +43,7 @@ namespace chat_app.FrontEnd.ViewModel
 
             client = new Client();
             client.connectedEvent += UserConnected;
+            client.privateMessageReceivedEvent += MessageReceived;
             client.messageReceivedEvent += MessageReceived;
             client.userDisconnectedEvent += RemoveUser;
             client.switchStatusEvent += SwitchStatus;
@@ -58,7 +60,17 @@ namespace chat_app.FrontEnd.ViewModel
                 client.ConnectToServer(username, ipAddress);
 
             }, o => !string.IsNullOrEmpty(username));
-            
+
+
+            //send private message--------------------------
+            SendPrivateMessageCommand = new RelayCommand(o => {
+
+                //var recipent="";
+
+                client.SendPrivateMessageToServer(message);
+            }
+            , o => !string.IsNullOrEmpty(message));
+
 
             //send message--------------------------
             SendMessageCommand = new RelayCommand(o => {

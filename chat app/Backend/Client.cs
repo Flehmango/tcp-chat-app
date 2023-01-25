@@ -1,19 +1,23 @@
 ﻿using chat_app.Backend;
 using System;
+using System.Globalization;
 //using System.Collections.Generic;
 //using System.Linq;
 //using System.Text;
 //using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace chat_app.Net
 {
+
     class Client
     {
         TcpClient client;
         public PacketReader PacketReader;
         public event Action connectedEvent;
+        public event Action privateMessageReceivedEvent;
         public event Action messageReceivedEvent;
         public event Action userDisconnectedEvent;
         public event Action switchStatusEvent;
@@ -51,23 +55,24 @@ namespace chat_app.Net
                     var opcode = PacketReader.ReadByte();
                     switch (opcode)
                     {
-                        case 1:
+                        case 0:
                             connectedEvent?.Invoke();
-
                             break;
+
+                        case 1:
+                            privateMessageReceivedEvent?.Invoke();
+                            break;
+
                         case 2:
                             messageReceivedEvent?.Invoke();
-
                             break;
 
                         case 3:
                             userDisconnectedEvent?.Invoke();
-
                             break;
 
                         case 4:
                             switchStatusEvent?.Invoke();
-
                             break;
 
                         default:
@@ -77,6 +82,18 @@ namespace chat_app.Net
                     }
                 }
             });
+        }
+
+        public void SendPrivateMessageToServer(string message)
+        {
+            /*var values = (object[])parameter;
+            var message = (string)values[0];
+            var recipent = (string)values[1];*/
+
+            var messagePacket = new PacketBuilder();
+            messagePacket.WriteOpCode(1);
+            messagePacket.WriteMessage(message);
+            client.Client.Send(messagePacket.GetPacketBytes());
         }
 
         public void SendMessageToServer(string message)

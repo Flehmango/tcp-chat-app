@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:chat_app.FrontEnd.View" 
         xmlns:viewmodel="clr-namespace:chat_app.FrontEnd.ViewModel"
         xmlns:view="clr-namespace:chat_app.FrontEnd.View"
+        xmlns:converters="clr-namespace:chat_app.Backend"
         mc:Ignorable="d"
         
         Title="Chat application - Konrad Stępniak" 
@@ -15,12 +16,12 @@
     <Window.Resources>
         <DataTemplate x:Name="GlobalChat" 
                       DataType="{x:Type viewmodel:GlobalChatModel}">
-            <view:GlobalChat DataContext="{Binding}"></view:GlobalChat>
+            <view:GlobalChat DataContext="{Binding}"/>
         </DataTemplate>
 
         <DataTemplate x:Name="PrivateChat"
                       DataType="{x:Type viewmodel:PrivateChatModel}">
-            <view:PrivateChat DataContext="{Binding}"></view:PrivateChat>
+            <view:PrivateChat DataContext="{Binding}"/>
         </DataTemplate>
     </Window.Resources>
     
@@ -81,9 +82,16 @@
                                 </TextBlock.Text>
                             </TextBlock>
                             <Button Content="Click to DM"
-                                        HorizontalAlignment="Left"
-                                        Click="toPrivateChatClick"
-                            />
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding SendPrivateMessageCommand}"
+                                    Click="btnClearTextboxes">
+                                <!--<Button.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MyConverter}">
+                                        <Binding Path="Width" ElementName="MyCanvas"/>
+                                        <Binding Path="Height" ElementName="MyCanvas"/>
+                                    </MultiBinding>
+                                </Button.CommandParameter>-->
+                            </Button>
                         </StackPanel>
                     </DataTemplate>
 
@@ -105,8 +113,9 @@
                 Width="109"
                 Height="32"
                 Content="Back to main chat" Click="toMainChatClick" FontSize="11"/>
-
+        
         <StackPanel Grid.Column="2">
+
             <ListView Height="416"
                       ItemsSource="{Binding Messages}"
                       />
@@ -122,7 +131,7 @@
                      UpdateSourceTrigger=PropertyChanged
                      }"
                 />
-            
+
                 <Button Height="48" 
                     DockPanel.Dock="Top" 
                     Content="Send" 
@@ -134,8 +143,10 @@
                     Click="btnClearTextboxes"
                     />
             </StackPanel>
-            
+
         </StackPanel>
+
+        <!-- <ContentPresenter Grid.Column="2"  Content="{Binding}"/>-->
     </Grid>
  
 </Window>

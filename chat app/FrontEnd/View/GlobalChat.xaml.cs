@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace chat_app.FrontEnd.View
 {
@@ -23,6 +24,29 @@ namespace chat_app.FrontEnd.View
         public GlobalChat()
         {
             InitializeComponent();
+        }
+
+        public static void DelayAction(int millisecond, Action action)
+        {
+            var timer = new DispatcherTimer();
+            timer.Tick += delegate
+
+            {
+                action.Invoke();
+                timer.Stop();
+            };
+
+            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
+            timer.Start();
+        }
+
+        private void btnClearTextboxes(object sender, RoutedEventArgs e)
+        {
+            DelayAction(1, new Action(() => {
+                //textboxUsername.Clear();
+                //textboxIP.Clear();
+                textboxMessage.Clear();
+            }));
         }
     }
 }

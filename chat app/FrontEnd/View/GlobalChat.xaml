@@ -5,10 +5,40 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:chat_app.FrontEnd.View"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="450"
       Title="GlobalChat">
 
     <Grid>
-        
+        <StackPanel Grid.Column="2">
+
+            <ListView Height="416"
+                      ItemsSource="{Binding Messages}"
+                      />
+
+            <StackPanel Orientation="Horizontal">
+
+                <TextBox Height="48" 
+                     x:Name="textboxMessage"
+                     Width="360"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Bottom"
+                     Text="{Binding message,
+                     UpdateSourceTrigger=PropertyChanged
+                     }"
+                />
+
+                <Button Height="48" 
+                    DockPanel.Dock="Top" 
+                    Content="Send" 
+                    Width="64" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    FontSize="16"
+                    Command="{Binding SendMessageCommand}"
+                    Click="btnClearTextboxes"
+                    />
+            </StackPanel>
+
+        </StackPanel>
     </Grid>
 </Page>

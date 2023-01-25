@@ -33,7 +33,7 @@ namespace Server
                 foreach (var usr in users)
                 {
                     var broadcastPacket = new PacketBuilder();
-                    broadcastPacket.WriteOpCode(1);
+                    broadcastPacket.WriteOpCode(0);
                     broadcastPacket.WriteMessage(usr.Username);
                     broadcastPacket.WriteMessage(usr.UID.ToString());
                     broadcastPacket.WriteMessage(usr.Status);
@@ -43,7 +43,20 @@ namespace Server
             }
         }
 
-        public static void BroadcastMessage(string message/*, string username = null*/)
+        public static void BroadcastPrivateMessage(string message)
+        {
+            foreach (var user in users)
+            {
+                var msgPacket = new PacketBuilder();
+                msgPacket.WriteOpCode(1);
+                msgPacket.WriteMessage(message);
+                //if (username is not null) msgPacket.WriteMessage(username);
+
+                user.ClientSocket.Client.Send(msgPacket.GetPacketBytes());
+            }
+        }
+
+        public static void BroadcastMessage(string message)
         {
             foreach (var user in users)
             {

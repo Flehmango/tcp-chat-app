@@ -38,6 +38,12 @@ namespace Server
                     var opcode = packetReader.ReadByte();
                     switch (opcode)
                     {
+                        case 1:
+                            var message = packetReader.ReadMessage();
+                            Console.WriteLine($"[{DateTime.Now}] {Username}(DM): {message}");
+                            Program.BroadcastPrivateMessage($"[{DateTime.Now.ToString("HH:mm")}] {Username}(DM): {message}");
+                            break;
+
                         case 2:
                             var msg = packetReader.ReadMessage();
                             Console.WriteLine($"[{DateTime.Now}] {Username}: {msg}");

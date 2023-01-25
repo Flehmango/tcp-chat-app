@@ -1,4 +1,5 @@
-﻿using System;
+﻿using chat_app.FrontEnd.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,8 @@ namespace chat_app.FrontEnd.View
         public MainWindow()
         {
             InitializeComponent();
+
+            //DataContext = new GlobalChatModel();
         }
         public static void DelayAction(int millisecond, Action action)
         {
@@ -50,12 +53,12 @@ namespace chat_app.FrontEnd.View
 
         private void toPrivateChatClick(object sender, RoutedEventArgs e)
         {
-
+            DataContext = new PrivateChatModel();
         }
 
         private void toMainChatClick(object sender, RoutedEventArgs e)
         {
-
+            DataContext = new GlobalChatModel();
         }
     }
 }
